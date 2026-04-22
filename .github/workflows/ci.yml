@@ -49,7 +49,7 @@ jobs:
           key: build-${{ matrix.node-version }}-${{ github.sha }}
 
       - run: 'yarn install --immutable'
-      - run: 'yarn build --force'
+      - run: 'yarn build'
 
   lint:
     name: 'Lint (global)'
