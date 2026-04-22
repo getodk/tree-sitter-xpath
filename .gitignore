@@ -1,0 +1,8 @@
+# Package management
+node_modules/
+.yarn
+
+# Build artifacts
+dist/
+.eslintcache
+
