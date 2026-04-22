@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["eslint.config.js", "prettier.config.js", "turbo.json", "vite.config.mts"]
+}

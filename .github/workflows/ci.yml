@@ -1,0 +1,119 @@
+name: 'ci'
+run-name: 'tree-sitter-xpath ci'
+
+on:
+  workflow_dispatch:
+  push:
+  merge_group:
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  TZ: 'America/Phoenix'
+  LOCALE_ID: 'en-US'
+
+jobs:
+  install-and-build:
+    name: 'Install dependencies and build packages'
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20.19.3', '22.12.0', '24.11.0']
+
+    steps:
+      - uses: 'actions/checkout@v5'
+
+      - uses: 'actions/setup-node@v6'
+        with:
+          node-version: '${{ matrix.node-version }}'
+
+      - uses: 'actions/cache@v5'
+        id: cache-install
+        with:
+          path: node_modules
+          key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', '.yarnrc.yml', '.github/workflows/ci.yml') }}
+
+      - uses: 'actions/cache@v5'
+        id: cache-build
+        with:
+          # Note: the tree-sitter-xpath .js and .wasm paths are standard for
+          # tree-sitter's build output. They also litter a bunch of other files
+          # in various build phases, several under `src` (which is why the
+          # grammar's TypeScript source is not there).
+          path: dist
+          key: build-${{ matrix.node-version }}-${{ github.sha }}
+
+      - run: 'yarn install --immutable'
+      - run: 'yarn build --force'
+
+  lint:
+    name: 'Lint (global)'
+    needs: ['install-and-build']
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      matrix:
+        node-version: ['24.11.0']
+
+    steps:
+      - uses: 'actions/checkout@v5'
+
+      - uses: 'actions/setup-node@v6'
+        with:
+          node-version: '${{ matrix.node-version }}'
+
+      - uses: 'actions/cache@v5'
+        id: cache-install
+        with:
+          path: node_modules
+          key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', '.yarnrc.yml', '.github/workflows/ci.yml') }}
+          fail-on-cache-miss: true
+
+      - uses: 'actions/cache@v5'
+        id: cache-build
+        with:
+          path: dist
+          key: build-${{ matrix.node-version }}-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - run: 'yarn lint'
+
+      - run: 'yarn format:checkonly'
+
+  test:
+    name: 'Test'
+    needs: ['install-and-build']
+    runs-on: 'ubuntu-latest'
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['20.19.3', '22.12.0', '24.11.0']
+
+    steps:
+      - uses: 'actions/checkout@v5'
+
+      - uses: 'actions/setup-node@v6'
+        with:
+          node-version: '${{ matrix.node-version }}'
+
+      - uses: 'actions/cache@v5'
+        id: cache-install
+        with:
+          path: node_modules
+          key: install-${{ matrix.node-version }}-${{ hashFiles('yarn.lock', '.yarnrc.yml', '.github/workflows/ci.yml') }}
+          fail-on-cache-miss: true
+
+      - uses: 'actions/cache@v5'
+        id: cache-build
+        with:
+          path: dist
+          key: build-${{ matrix.node-version }}-${{ github.sha }}
+          fail-on-cache-miss: true
+
+      - run: 'yarn test'
