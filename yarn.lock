@@ -383,7 +383,7 @@ __metadata:
     typescript-eslint: "npm:^8.72.2"
     vite: "npm:^7.3.8"
     vite-plugin-static-copy: "npm:^3.4.0"
-    web-tree-sitter: "npm:0.24.7"
+    web-tree-sitter: "npm:0.24.5"
   peerDependencies:
     web-tree-sitter: 0.24.5
   dependenciesMeta:
@@ -2316,10 +2316,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-tree-sitter@npm:0.24.7":
-  version: 0.24.7
-  resolution: "web-tree-sitter@npm:0.24.7"
-  checksum: 10c0/f0b123eea895a72060eba05354947dc24a3568bca854d1805abef3c1301cc2bf72975494e7e68a29ad75788d722ce36f0a1021d78ad8cafabe0a21d8a601beff
+"web-tree-sitter@npm:0.24.5":
+  version: 0.24.5
+  resolution: "web-tree-sitter@npm:0.24.5"
+  checksum: 10c0/e6b88e4967227ab4272fb20a063882fe877c6a948a0367e6fae324807a31f082151f5110f1f2beeddba98714af20bc13cb6b62aac6aad986e24da31796ba1ce1
   languageName: node
   linkType: hard
 

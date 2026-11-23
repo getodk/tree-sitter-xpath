@@ -67,7 +67,7 @@
     "typescript-eslint": "^8.72.2",
     "vite": "^7.3.8",
     "vite-plugin-static-copy": "^3.4.0",
-    "web-tree-sitter": "0.24.7"
+    "web-tree-sitter": "0.24.5"
   },
   "resolutions": {
     "tree-sitter": "0.22.1",
